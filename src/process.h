@@ -94,14 +94,25 @@ void parse_input(FILE* fp, struct process_list* plist, unsigned int num)
 {
     char buffer[BUFFER_SIZE];
     
-    /*
-    fgets(buffer, BUFFER_SIZE, (FILE*)fp);
-    num = atoi(buffer);
-    */
     
+    //fgets(buffer, BUFFER_SIZE, (FILE*)fp);
+    //num = atoi(buffer);
     
+    num = 0;
+    while(fgets(buffer, BUFFER_SIZE, (FILE*)fp) != NULL)
+    {
+        if(isblank(buffer[0]) ||
+            buffer[0] == '#' ||
+            buffer[0] == '\n' )
+        {
+            continue;
+        }
+        printf("%s\n", buffer);
+        num++;
+    }
+    rewind(fp);
     plist->list = (struct process*)malloc(num * sizeof(struct process));
-    //plist->cap = num;
+    plist->cap = num;
     plist->_size = 0;
     plist->_index = 0;
     
@@ -114,8 +125,8 @@ void parse_input(FILE* fp, struct process_list* plist, unsigned int num)
             continue;
         }
         
-        num++;
-        plist->cap = num;
+        //num++;
+        //plist->cap = num;
         
         struct process temp;
         initialize(temp);
