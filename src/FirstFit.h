@@ -1,5 +1,5 @@
 /*First Fit Algorithm*/
-void Sim_First_Fit(const struct process* proc, const int num, FILE* output)
+void Sim_First_Fit(struct process_list* proc, FILE* output)
 {
     unsigned int sim_time = 0;
     
