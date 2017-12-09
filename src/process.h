@@ -107,7 +107,6 @@ void parse_input(FILE* fp, struct process_list* plist, unsigned int num)
         {
             continue;
         }
-        printf("%s\n", buffer);
         num++;
     }
     rewind(fp);
