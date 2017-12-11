@@ -85,7 +85,7 @@ int de_char_exist(char def[24], char id){
 }
 
 int frame_time = 0;
-
+int last_time = 0;
 void Sim_Best_Fit(struct process_list* pl, FILE* output)
 {
 
@@ -146,6 +146,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                 j++;
               }
               printf("time %dms: Process %c removed:\n",time + frame_time,pl->list[i].id  );
+              last_time = time + frame_time;
               print_frames(stdout,frame);
             }
 
@@ -327,6 +328,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
 
                 }else{//skip processes
                         printf("time %dms: Cannot place process %c -- skipped!\n",time + frame_time,pl->list[i].id  );
+                        print_frames(stdout,frame);
                 }
 
             }else{
@@ -341,4 +343,5 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
       }
       time++;
     }
+    printf("time %dms: Simulator ended (Contiguous -- Best-Fit)\n",last_time);
 }
