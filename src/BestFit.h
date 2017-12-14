@@ -165,7 +165,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
             //   print_list(p_list);
               remove_ip(ip, pl->list[i].id);
               t_counter--;
-              printf("c%d\n",t_counter);
+              // printf("c%d\n",t_counter);
               // print_list(p_list);
               free_frame = free_frame + pl->list[i]._mem;
               // printf("free_frame:%d\n",free_frame );
