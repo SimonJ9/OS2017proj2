@@ -2,17 +2,15 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
 {
     int i, j;
     int len = 10, n = 0;
-    int p, flag;
+    int p;
     for(i = 0; i < pl->_size; i++)
     {
         p = 0;
-        flag = 0;
         for(j = 0; j < FRAME_SIZE; j++)
         {
             if(frames[j] == pl->list[i].id)
             {
                 fprintf(output, "%c: ", pl->list[i].id);
-                flag = 1;
                 break;
             }
         }
@@ -50,7 +48,7 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
     unsigned int remained = FRAME_SIZE;
     unsigned int counter = 0;
     
-    unsigned int i, j, frame_ind, frame_counter;
+    unsigned int i, j, frame_ind;
     for(i = 0; i < FRAME_SIZE; i++)
     {
         frames[i] = '.';

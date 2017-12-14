@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     Sim_Next_Fit(&p_list, stdout);
     Sim_First_Fit(&p_list, stdout);
     Sim_Best_Fit(&p_list, stdout);
-    Sim_Non_Con(p_list.list, p_list._size, stdout);
+    Sim_Non_Con(&p_list, stdout);
 
 #if 0
     print_list(&p_list);
