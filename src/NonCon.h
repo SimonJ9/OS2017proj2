@@ -28,13 +28,6 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
                 fprintf(output, "\n");
             }
         }
-        /*
-        if((n+1)%len != 0 && flag == 1)
-        {
-            fprintf(output, "\n");
-        
-            continue;
-        }*/
     }
     
     
@@ -49,6 +42,7 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
     unsigned int counter = 0;
     
     unsigned int i, j, frame_ind;
+    printf("TILL HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     for(i = 0; i < FRAME_SIZE; i++)
     {
         frames[i] = '.';
@@ -76,7 +70,6 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
             counter++;
         }
     }
-    
     //algo
     printf("time %dms: Simulator started (Non-contiguous)\n", sim_time);
     fflush(stdout);
