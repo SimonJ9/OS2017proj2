@@ -361,4 +361,5 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
       time++;
     }
     printf("time %dms: Simulator ended (Contiguous -- Best-Fit)\n",last_time);
+    printf("\n");
 }
