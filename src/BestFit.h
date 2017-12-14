@@ -165,7 +165,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
             //   print_list(p_list);
               remove_ip(ip, pl->list[i].id);
               t_counter--;
-              // printf("c%d\n",t_counter);
+            //   printf("c%d\n",t_counter);
               // print_list(p_list);
               free_frame = free_frame + pl->list[i]._mem;
               // printf("free_frame:%d\n",free_frame );
@@ -182,7 +182,12 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
               print_frames(stdout,frame);
             }
 
-        }else{
+        }
+      }
+
+
+      for(i = 0; i < pl->_size; i++){
+            if(process_exist(ip,pl->list[i].id) != 1){
             //check add_process
 
             if(pl->list[i].t_arrival_1 == time_t ||
@@ -368,9 +373,9 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
         }
 
 
-
-
       }
+
+
       time_t++;
     }
     printf("time %dms: Simulator ended (Contiguous -- Best-Fit)\n",last_time);
