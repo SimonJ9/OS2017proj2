@@ -117,6 +117,7 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                     fprintf(output, "time %dms: Cannot place process %c -- skipped!\n", 
                         sim_time, plist->list[i].id);
                         fflush(stdout);
+                    print_frames(output, frames);
                     //total 1, now 1
                     if(plist->list[i].t_running_2 == 0 &&
                         plist->list[i].t_running_3 == 0)
