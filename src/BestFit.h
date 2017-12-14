@@ -106,7 +106,7 @@ int last_time = 0;
 void Sim_Best_Fit(struct process_list* pl, FILE* output)
 {
 
-    print_list(pl);
+    // print_list(pl);
     // printf("%d\n",pl->_size );
     // printf("%d\n",pl->_index);
     // printf("%d\n",pl->cap );
