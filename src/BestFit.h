@@ -26,6 +26,7 @@ int check_num_free_partition(char frame[FRAME_SIZE], unsigned int mem){
     unsigned int min_index = FRAME_SIZE;
     unsigned int min_counter;
     min_counter = FRAME_SIZE;
+    int reset = 0;
     // unsigned int ff[10] = {0,0,0,0,0,0,0,0,0,0};
     // int
 
@@ -37,19 +38,29 @@ int check_num_free_partition(char frame[FRAME_SIZE], unsigned int mem){
             counter ++;
             // printf("counter_in:%d\n",counter );
             // min_index = i;
+            reset = 1;
         }else{// next non '.'
-
+            if(reset == 1){
               if(counter >= mem && counter < min){//
                   // printf("counter:%d\n",counter );
-                  min_index = i - counter;
-                  // printf("min_index:%d\n",min_index );
-                  min_counter = counter;
-                  counter = 0;
+                  
+                     min_index = i - counter;
+                     
+                     min = counter;
+                     reset = 0;
+                     counter = 0;
+          
+                 
               }else{//not big enough skip
                   counter = 0;
+                  reset = 0;
                 //   printf("skip\n" );
-                  // continue;s
+                 // continue;s
               }
+            }else{
+                 
+                 continue;
+            }
 
         }
 
@@ -94,7 +105,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
     // printf("%d\n",pl->_index);
     // printf("%d\n",pl->cap );
 
-    printf("time 0ms: Simulator started (Contiguous -- Next-Fit)\n");
+    printf("time 0ms: Simulator started (Contiguous -- Best-Fit)\n");
     struct process_list* p_list = (struct process_list*)malloc(sizeof(struct process_list));
     initialize_list(*p_list);
     p_list->cap = pl->cap;
@@ -152,7 +163,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
 
         }else{
             //check add_process
-
+              
             if(pl->list[i].t_arrival_1 == time || (pl->list[i].t_arrival_2 == time && pl->list[i].t_running_2 != 0)){
 
                 printf("time %dms: Process %c arrived (requires %d frames)\n",time + frame_time, pl->list[i].id,pl->list[i]._mem);
@@ -167,7 +178,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                         char letter[24];
                         int flag = 0;
                         int z = 0;
-
+                        
                         if(frame[0] == '.'){
                             int t;
                             z = 0;
@@ -225,9 +236,9 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                                 letter[ttt] = 'z';
                                ttt++;
                             }
-
-
-
+                            
+                            
+                            
                         }else{//when frame[0] is not a dot
                             int first_char_index = 0;
                             while(first_char_index < FRAME_SIZE){
@@ -307,7 +318,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                         }
                         // print_frames(stdout,frame);
                         // printf("time:%d\n",time );
-
+                        
                         free_frame = free_frame - pl->list[i]._mem;
                         // printf("free_frame:%d\n",free_frame );
                         // printf("size:%d\n",pl->_size );
@@ -345,3 +356,4 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
     }
     printf("time %dms: Simulator ended (Contiguous -- Best-Fit)\n",last_time);
 }
+
