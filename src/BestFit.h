@@ -21,9 +21,6 @@ int process_exist(char ip[26],char id ){
     return flag;
 }
 
-// int num_free_part(char frame[FRAME_SIZE]){
-//
-// }
 
 int check_num_free_partition(char frame[FRAME_SIZE], unsigned int mem){
     unsigned int i;
@@ -33,12 +30,7 @@ int check_num_free_partition(char frame[FRAME_SIZE], unsigned int mem){
     unsigned int min_counter;
     min_counter = FRAME_SIZE;
     int reset = 0;
-    // unsigned int ff[10] = {0,0,0,0,0,0,0,0,0,0};
-    // int
 
-    // int
-    // num_free_part(frame);
-    // printf("mem:%d\n",mem);
     for(i = 0; i < FRAME_SIZE; i++){
         if(frame[i] == '.'){
             counter ++;
@@ -106,9 +98,7 @@ int last_time = 0;
 
 void remove_ip(char ip[26], char id){
     unsigned int i;
-    // int flag = 0;
-    // printf("id:%c\n",id);
-    // printf("size:%d\n", pl->_size);
+
     for(i = 0; i < 26; i++){
         if(ip[i] == id){
             // flag = 1;
@@ -116,15 +106,11 @@ void remove_ip(char ip[26], char id){
             break;
         }
     }
-    // printf("flag:%d\n",flag);
 
-    // return flag;
 }
 void add_ip(char ip[26], char id){
     unsigned int i;
-    // int flag = 0;
-    // printf("id:%c\n",id);
-    // printf("size:%d\n", pl->_size);
+
     for(i = 0; i < 26; i++){
         if(ip[i] == '.'){
             // flag = 1;
@@ -132,58 +118,34 @@ void add_ip(char ip[26], char id){
             break;
         }
     }
-    // printf("flag:%d\n",flag);
 
-    // return flag;
 }
 
 void Sim_Best_Fit(struct process_list* pl, FILE* output)
 {
 
-    // print_list(pl);
-    // printf("%d\n",pl->_size );
-    // printf("%d\n",pl->_index);
-    // printf("%d\n",pl->cap );
 
     printf("time 0ms: Simulator started (Contiguous -- Best-Fit)\n");
     fflush(stdout);
-    // struct process_list* p_list = (struct process_list*)malloc(sizeof(struct process_list));
-    // initialize_list(*p_list);
-    // p_list->cap = pl->cap;
-    // p_list->_index = pl->_index;
-    // p_list->list = (struct process*)realloc(p_list->list, sizeof(struct process) * pl->cap);
 
-    // struct process_list* plist = (struct process_list*)malloc(sizeof(struct process_list));
-    // initialize_list(*plist);
-    // plist->cap = pl->cap;
-    // plist->_index = pl->_index;
-    // plist->list = (struct process*)realloc(plist->list, sizeof(struct process) * pl->cap);
-    // // counter = pl->_size;
-    // // print_list(p_list);
-    // int i;
-    // for(i = 0; i < pl->_size; i++)
-    // {
-    //     add_process(plist, pl->list[i]);
-    //     // if(pl->list[i].t_arrival_2 > 0)
-    //     // {
-    //     //     // counter++;
-    //     // }
-    //     // if(pl->list[i].t_arrival_3 > 0)
-    //     // {
-    //     //     // counter++;
-    //     // }
-    // }
-    // print_list(plist);
-    // counter = pl->_size;
-    // p_list->cap = 1;
-    // printf("===%d, %d\n",p_list->_size, p_list->cap );
     int time_t= 0;
     int free_frame = FRAME_SIZE;
-    // int counter = pl->_size;
-    // int flag = 0;
     char frame[FRAME_SIZE];
     int z;
+    int t_counter = 0;
     char ip[26] ;
+    for(z = 0; z < pl->cap ; z++){
+        if(pl->list[z].t_running_1 != 0){
+            t_counter++;
+        }
+        if(pl->list[z].t_running_2 != 0){
+            t_counter++;
+        }
+        if(pl->list[z].t_running_3 != 0){
+            t_counter++;
+        }
+    }
+    // printf("coount%d",t_counter);
     for(z = 0; z < 26; z++){
         ip[z] = '.';
     }
@@ -191,30 +153,19 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
     {
         frame[z] = '.';
     }
-    // print_frames(stdout,frame);
-    while( time_t < 7000){
+    while( t_counter > 0){
       int i;
-    //   printf("time:%d\n",time );
-      //go though the pllist for arrival time
-      // printf("size:%d\n",pl->_size );
       for(i = 0; i < pl->_size; i++){
-        // do remove only when we have process inside p_list
-        // do arrival only when not inside p_list
-        // printf("size:%d\n",pl->_size );
-        // char tid = pl->list[i].id;
-        // process_exist(&p_list,tid)
-        // printf("size:%d\n",pl->_size );
         if (process_exist(ip,pl->list[i].id) == 1){// process already inside
             //check remove_process
             if((pl->list[i].t_running_1 +  pl->list[i].t_arrival_1 == time_t) ||
             (pl->list[i].t_running_2 +  pl->list[i].t_arrival_2 == time_t)||
             (pl->list[i].t_running_3 +  pl->list[i].t_arrival_3 == time_t)){
-              //check the p_list for remove
-              // print_frames(stdout,frame);
-              // printf("time:%d\n",time );
               int j =0;
             //   print_list(p_list);
               remove_ip(ip, pl->list[i].id);
+              t_counter--;
+              printf("c%d\n",t_counter);
               // print_list(p_list);
               free_frame = free_frame + pl->list[i]._mem;
               // printf("free_frame:%d\n",free_frame );
@@ -324,11 +275,9 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                                 }
                                 first_char_index++;
                             }
-                            // first_char_index++;
+
                             int t;
                             z = 0;
-                            // printf("char%c,%d\n",letter[z],z);
-                            // printf("char%c,%d\n",letter[z+1],z+1);
                             for(t = first_char_index; t<FRAME_SIZE; t++){
                                 if(frame[t] != '.'){
                                     remove_frame_num++;
@@ -396,30 +345,18 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                             frame[index+c] = pl->list[i].id;
 
                         }
-                        // print_frames(stdout,frame);
-                        // printf("time:%d\n",time );
 
                         free_frame = free_frame - pl->list[i]._mem;
-                        // printf("free_frame:%d\n",free_frame );
-                        // printf("size:%d\n",pl->_size );
-                        // printf("index2:%d\n",index );
-                        // print_list(pl);
-                        // print_list(p_list);
-                        // print_list(p_list);
-                        // printf("%d, %d\n",p_list->_size, p_list->cap );
-                        // time 0ms: Process A arrived (requires 45 frames)
-                        // printf("time %dms: Process %c arrived (requires %d frames)\n",time, pl->list[i].id,pl->list[i]._mem);
+
                         printf("time %dms: Placed process %c:\n",time_t + frame_time,pl->list[i].id  );
                         fflush(stdout);
                         print_frames(stdout,frame);
                         add_ip(ip,pl->list[i].id);
-                        // print_list(p_list);
-                        // printf("index3:%d\n",index );
-
                     }
 
                 }else{//skip processes
                         printf("time %dms: Cannot place process %c -- skipped!\n",time_t + frame_time,pl->list[i].id  );
+                        t_counter--;
                         fflush(stdout);
                         print_frames(stdout,frame);
                 }
@@ -436,10 +373,6 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
       }
       time_t++;
     }
-    // free_list(*p_list);
-    // free(p_list);
-    // free_list(*plist);
-    // free(plist);
     printf("time %dms: Simulator ended (Contiguous -- Best-Fit)\n",last_time);
     fflush(stdout);
     printf("\n");
