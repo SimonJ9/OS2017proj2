@@ -112,6 +112,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
     // printf("%d\n",pl->cap );
 
     printf("time 0ms: Simulator started (Contiguous -- Best-Fit)\n");
+    fflush(stdout);
     struct process_list* p_list = (struct process_list*)malloc(sizeof(struct process_list));
     initialize_list(*p_list);
     p_list->cap = pl->cap;
@@ -163,6 +164,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                 j++;
               }
               printf("time %dms: Process %c removed:\n",time + frame_time,pl->list[i].id  );
+              fflush(stdout);
               last_time = time + frame_time;
               print_frames(stdout,frame);
             }
@@ -173,6 +175,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
             if(pl->list[i].t_arrival_1 == time || (pl->list[i].t_arrival_2 == time && pl->list[i].t_running_2 != 0)||(pl->list[i].t_arrival_3 == time && pl->list[i].t_running_3 != 0)){
 
                 printf("time %dms: Process %c arrived (requires %d frames)\n",time + frame_time, pl->list[i].id,pl->list[i]._mem);
+                fflush(stdout);
                 if (free_frame >= pl->list[i]._mem){//
                     unsigned int index;
                     index = check_num_free_partition(frame,pl->list[i]._mem);
@@ -180,6 +183,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
 
                     if(index == FRAME_SIZE){//defragmatation
                         printf("time %dms: Cannot place process %c -- starting defragmentation\n",time + frame_time,pl->list[i].id );
+                        fflush(stdout);
                         int remove_frame_num = 0;
                         char letter[24];
                         int flag = 0;
@@ -201,12 +205,14 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                                 }
                             }
                             printf("time %dms: Defragmentation complete (moved %d frames: ",time + frame_time,remove_frame_num);
+                            fflush(stdout);
                             int temp = 0;
                             while(temp < z-1){
                                 printf("%c, ",letter[temp]);
                                 temp++;
                             }
                             printf("%c)\n",letter[z-1]);
+                            fflush(stdout);
                             int new_index = 0;
                             for(t = 0; t < z; t++){
                                 for(temp = 0; temp < pl->_size; temp++){
@@ -228,6 +234,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                             frame_time = frame_time + remove_frame_num;
                             print_frames(stdout,frame);
                             printf("time %dms: Placed process %c:\n",time + frame_time,pl->list[i].id  );
+                            fflush(stdout);
                             add_process(p_list,pl->list[i]);
                             free_frame = free_frame - pl->list[i]._mem;
                             t = 0;
@@ -273,6 +280,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                             // printf("char0%c,%d\n",letter[0],z);
                             // printf("char1%c,%d\n",letter[1],z+1);
                             printf("time %dms: Defragmentation complete (moved %d frames: ",time + frame_time,remove_frame_num);
+                            fflush(stdout);
                             int temp = 0;
                             while(temp < z-1){
                                 printf("%c, ",letter[temp]);
@@ -280,6 +288,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                             }
                             // int t;
                             printf("%c)\n",letter[z-1]);
+                            fflush(stdout);
                             int new_index = first_char_index;
                             for(t = 0; t < z; t++){
                                 for(temp = 0; temp < pl->_size; temp++){
@@ -301,6 +310,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                             frame_time = frame_time + remove_frame_num;
                             print_frames(stdout,frame);
                             printf("time %dms: Placed process %c:\n",time + frame_time,pl->list[i].id  );
+                            fflush(stdout);
                             add_process(p_list,pl->list[i]);
                             free_frame = free_frame - pl->list[i]._mem;
                             t = 0;
@@ -336,6 +346,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                         // time 0ms: Process A arrived (requires 45 frames)
                         // printf("time %dms: Process %c arrived (requires %d frames)\n",time, pl->list[i].id,pl->list[i]._mem);
                         printf("time %dms: Placed process %c:\n",time + frame_time,pl->list[i].id  );
+                        fflush(stdout);
                         print_frames(stdout,frame);
                         add_process(p_list,pl->list[i]);
                         // print_list(p_list);
@@ -345,6 +356,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
 
                 }else{//skip processes
                         printf("time %dms: Cannot place process %c -- skipped!\n",time + frame_time,pl->list[i].id  );
+                        fflush(stdout);
                         print_frames(stdout,frame);
                 }
 
@@ -361,5 +373,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
       time++;
     }
     printf("time %dms: Simulator ended (Contiguous -- Best-Fit)\n",last_time);
+    fflush(stdout);
     printf("\n");
+    fflush(stdout);
 }
