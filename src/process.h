@@ -153,6 +153,8 @@ void parse_input(FILE* fp, struct process_list* plist, unsigned int num)
         {
             temp.t_arrival_2 = 0;
             temp.t_running_2 = 0;
+            temp.t_arrival_3 = 0;
+            temp.t_running_3 = 0;
         }
         add_process(plist, temp);
     }
