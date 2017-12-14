@@ -44,6 +44,7 @@ void add(struct process_list * pl, bool * flag, char frame[FRAME_SIZE], int i)
                         frame[k] = pl->list[i].id;
                     }
                     printf("time %dms: Placed process %c:\n", t+dfrag_t, pl->list[i].id);
+                    fflush(stdout);
                     print_frames(stdout, frame);
                 }
                 temp++;
@@ -78,12 +79,15 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
         frame[f_index] = '.';
     }
     printf("time %dms: Simulator started (Contiguous -- First-Fit)\n", 0);
+    fflush(stdout);
     while (true)
     {
         if (t > max_t)
         {
             printf("time %dms: Simulator ended (Contiguous -- First-Fit)\n", t+dfrag_t-1);
+            fflush(stdout);
             printf("\n");
+            fflush(stdout);
             break;
         }
         unsigned int i, j;
@@ -106,6 +110,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     if (flag2)
                     {
                         printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
+                        fflush(stdout);
                         print_frames(stdout, frame);
                     }
                 }
@@ -127,6 +132,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     if (flag2)
                     {
                         printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
+                        fflush(stdout);
                         print_frames(stdout, frame);
                     }
                 }
@@ -148,6 +154,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     if (flag2)
                     {
                         printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
+                        fflush(stdout);
                         print_frames(stdout, frame);
                     }
                 }
@@ -159,6 +166,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                  pl->list[i].t_running_1 != 0)
             {
                 printf("time %dms: Process %c arrived (requires %d frames)\n", t+dfrag_t, pl->list[i].id, pl->list[i]._mem);
+                fflush(stdout);
                 if (s_size >= pl->list[i]._mem)
                 {
                     bool flag = false;
@@ -166,6 +174,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     if ( !flag )
                     {
                         printf("time %dms: Cannot place process %c -- starting defragmentation\n", t+dfrag_t, pl->list[i].id);
+                        fflush(stdout);
                         int dfrag = 0;
                         int numofempty = 0;
                         int dfrag_t2 = 0;
@@ -217,16 +226,19 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                             frame[FRAME_SIZE-j-1] = '.';
                         }
                         printf("time %dms: Defragmentation complete (moved %d frames:", t+dfrag_t, dfrag_t2);
+                        fflush(stdout);
                         for (j = 0; j < dfrag_s; j++)
                         {
                             printf(" %c", t_arr[j]);
                             if (j != dfrag_s - 1)
                             {
                                 printf(",");
+                                fflush(stdout);
                             }
                             else
                             {
                                 printf(")\n");
+                                fflush(stdout);
                             }
                         }
                         print_frames(stdout, frame);
@@ -236,6 +248,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                 else
                 {
                     printf("time %dms: Cannot place process %c -- skipped!\n", t+dfrag_t, pl->list[i].id);
+                    fflush(stdout);
                     print_frames(stdout, frame);
                     continue;
                 }
@@ -247,6 +260,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                  pl->list[i].t_running_2 != 0)
             {
                 printf("time %dms: Process %c arrived (requires %d frames)\n", t+dfrag_t, pl->list[i].id, pl->list[i]._mem);
+                fflush(stdout);
                 if (s_size >= pl->list[i]._mem)
                 {
                     bool flag = false;
@@ -254,6 +268,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     if ( !flag )
                     {
                         printf("time %dms: Cannot place process %c -- starting defragmentation\n", t+dfrag_t, pl->list[i].id);
+                        fflush(stdout);
                         int dfrag = 0;
                         int numofempty = 0;
                         int dfrag_s = 0;
@@ -305,16 +320,19 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                             frame[FRAME_SIZE-j-1] = '.';
                         }
                         printf("time %dms: Defragmentation complete (moved %d frames:", t+dfrag_t, dfrag_t2);
+                        fflush(stdout);
                         for (j = 0; j < dfrag_s; j++)
                         {
                             printf(" %c", t_arr[j]);
                             if (j != dfrag_s - 1)
                             {
                                 printf(",");
+                                fflush(stdout);
                             }
                             else
                             {
                                 printf(")\n");
+                                fflush(stdout);
                             }
                         }
                         print_frames(stdout, frame);
@@ -324,6 +342,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                 else
                 {
                     printf("time %dms: Cannot place process %c -- skipped!\n", t+dfrag_t, pl->list[i].id);
+                    fflush(stdout);
                     print_frames(stdout, frame);
                     continue;
                 }
@@ -335,6 +354,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                  pl->list[i].t_running_3 != 0)
             {
                 printf("time %dms: Process %c arrived (requires %d frames)\n", t+dfrag_t, pl->list[i].id, pl->list[i]._mem);
+                fflush(stdout);
                 if (s_size >= pl->list[i]._mem)
                 {
                     bool flag = false;
@@ -342,6 +362,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     if ( !flag )
                     {
                         printf("time %dms: Cannot place process %c -- starting defragmentation\n", t+dfrag_t, pl->list[i].id);
+                        fflush(stdout);
                         int dfrag = 0;
                         int numofempty = 0;
                         int dfrag_s = 0;
@@ -393,16 +414,19 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                             frame[FRAME_SIZE-j-1] = '.';
                         }
                         printf("time %dms: Defragmentation complete (moved %d frames:", t+dfrag_t, dfrag_t2);
+                        fflush(stdout);
                         for (j = 0; j < dfrag_s; j++)
                         {
                             printf(" %c", t_arr[j]);
                             if (j != dfrag_s - 1)
                             {
                                 printf(",");
+                                fflush(stdout);
                             }
                             else
                             {
                                 printf(")\n");
+                                fflush(stdout);
                             }
                         }
                         print_frames(stdout, frame);
@@ -412,6 +436,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                 else
                 {
                     printf("time %dms: Cannot place process %c -- skipped!\n", t+dfrag_t, pl->list[i].id);
+                    fflush(stdout);
                     print_frames(stdout, frame);
                     continue;
                 }
