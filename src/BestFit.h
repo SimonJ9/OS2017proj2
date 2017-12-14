@@ -1,3 +1,9 @@
+// RCS ID: zhangs18
+// Name:Shenrui Zhang
+// RCS ID: songh4
+// Name:Haotian Song
+// RCS ID: jiangh5
+// Name:Hantian Jiang
 
 int process_exist(struct process_list* pl,char id ){
     unsigned int i;
@@ -43,14 +49,14 @@ int check_num_free_partition(char frame[FRAME_SIZE], unsigned int mem){
             if(reset == 1){
               if(counter >= mem && counter < min){//
                   // printf("counter:%d\n",counter );
-                  
+
                      min_index = i - counter;
-                     
+
                      min = counter;
                      reset = 0;
                      counter = 0;
-          
-                 
+
+
               }else{//not big enough skip
                   counter = 0;
                   reset = 0;
@@ -58,7 +64,7 @@ int check_num_free_partition(char frame[FRAME_SIZE], unsigned int mem){
                  // continue;s
               }
             }else{
-                 
+
                  continue;
             }
 
@@ -100,7 +106,7 @@ int last_time = 0;
 void Sim_Best_Fit(struct process_list* pl, FILE* output)
 {
 
-    // print_list(pl);
+    print_list(pl);
     // printf("%d\n",pl->_size );
     // printf("%d\n",pl->_index);
     // printf("%d\n",pl->cap );
@@ -139,7 +145,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
         // printf("size:%d\n",pl->_size );
         if (process_exist(p_list,pl->list[i].id) == 1){// process already inside
             //check remove_process
-            if(pl->list[i].t_running_1 +  pl->list[i].t_arrival_1 == time || pl->list[i].t_running_2 +  pl->list[i].t_arrival_2 == time ){
+            if((pl->list[i].t_running_1 +  pl->list[i].t_arrival_1 == time) || (pl->list[i].t_running_2 +  pl->list[i].t_arrival_2 == time)||(pl->list[i].t_running_3 +  pl->list[i].t_arrival_3 == time) ){
               //check the p_list for remove
               // print_frames(stdout,frame);
               // printf("time:%d\n",time );
@@ -163,8 +169,8 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
 
         }else{
             //check add_process
-              
-            if(pl->list[i].t_arrival_1 == time || (pl->list[i].t_arrival_2 == time && pl->list[i].t_running_2 != 0)){
+
+            if(pl->list[i].t_arrival_1 == time || (pl->list[i].t_arrival_2 == time && pl->list[i].t_running_2 != 0)||(pl->list[i].t_arrival_3 == time && pl->list[i].t_running_3 != 0)){
 
                 printf("time %dms: Process %c arrived (requires %d frames)\n",time + frame_time, pl->list[i].id,pl->list[i]._mem);
                 if (free_frame >= pl->list[i]._mem){//
@@ -178,7 +184,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                         char letter[24];
                         int flag = 0;
                         int z = 0;
-                        
+
                         if(frame[0] == '.'){
                             int t;
                             z = 0;
@@ -236,9 +242,9 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                                 letter[ttt] = 'z';
                                ttt++;
                             }
-                            
-                            
-                            
+
+
+
                         }else{//when frame[0] is not a dot
                             int first_char_index = 0;
                             while(first_char_index < FRAME_SIZE){
@@ -318,7 +324,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                         }
                         // print_frames(stdout,frame);
                         // printf("time:%d\n",time );
-                        
+
                         free_frame = free_frame - pl->list[i]._mem;
                         // printf("free_frame:%d\n",free_frame );
                         // printf("size:%d\n",pl->_size );
@@ -356,4 +362,3 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
     }
     printf("time %dms: Simulator ended (Contiguous -- Best-Fit)\n",last_time);
 }
-
