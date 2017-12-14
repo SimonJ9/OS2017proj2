@@ -3,9 +3,11 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
     int i, j;
     int len = 10, n = 0;
     int p;
+    fprintf(output, "PAGE TABLE [page,frame]:\n");
     for(i = 0; i < pl->_size; i++)
     {
         p = 0;
+        n = 0;
         for(j = 0; j < FRAME_SIZE; j++)
         {
             if(frames[j] == pl->list[i].id)
@@ -27,12 +29,16 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
                 n = 0;
                 fprintf(output, "\n");
             }
+            else if(n > 0)
+            {
+                fprintf(output, " ");
+            }
         }
-    }
-    
-    if(n != len && n > 0)
-    {
-        fprintf(output, "\n");
+        
+        if(n != len && n > 0)
+        {
+            fprintf(output, "\n");
+        }
     }
 }
 
@@ -135,6 +141,8 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
                     fprintf(output, "time %dms: Cannot place process %c -- skipped!\n", 
                         sim_time, plist->list[i].id);
                         fflush(stdout);
+                    print_frames(output, frames);
+                    print_page(plist, frames, output);
                     //total 1, now 1
                     if(plist->list[i].t_running_2 == 0 &&
                         plist->list[i].t_running_3 == 0)
@@ -211,7 +219,8 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
         sim_time++;
         
     }
+    sim_time--;
     fprintf(output, "time %dms: Simulator ended (Non-contiguous)\n", sim_time);
+    free_list(*plist);
     free(plist);
-    
 }

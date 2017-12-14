@@ -376,4 +376,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
     fflush(stdout);
     printf("\n");
     fflush(stdout);
+    free_list(*p_list);
+    free(p_list);
+    
 }
