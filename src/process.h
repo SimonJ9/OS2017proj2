@@ -180,6 +180,13 @@ void parse_input(FILE* fp, struct process_list* plist, unsigned int num)
     return;
 }
 
+//handle memory issues
+void free_list(struct process_list p)
+{
+    free(p.list);
+}
+
+
 void print_frames(FILE* fp, char frame[FRAME_SIZE])
 {
     unsigned int i;

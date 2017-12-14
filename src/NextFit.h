@@ -356,7 +356,8 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
     }
     
     
-    
+    free_list(*plist);
+    free(plist);
     
     
     printf("time %dms: Simulator ended (Contiguous -- Next-Fit)\n\n", sim_time-1);

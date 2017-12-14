@@ -22,7 +22,7 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
                 p++;
                 n++;
             }
-            if((n+1)%len == 0)
+            if(n%len == 0 && n>0)
             {
                 n = 0;
                 fprintf(output, "\n");
@@ -30,7 +30,10 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
         }
     }
     
-    
+    if(n != len && n > 0)
+    {
+        fprintf(output, "\n");
+    }
 }
 
 
@@ -42,7 +45,6 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
     unsigned int counter = 0;
     
     unsigned int i, j, frame_ind;
-    printf("TILL HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     for(i = 0; i < FRAME_SIZE; i++)
     {
         frames[i] = '.';
@@ -100,6 +102,7 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
                     sim_time, plist->list[i].id);
                 fflush(stdout);
                 print_frames(output, frames);
+                print_page(plist, frames, output);
                 counter--;
             }
             
@@ -208,6 +211,7 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
         sim_time++;
         
     }
-    
+    fprintf(output, "time %dms: Simulator ended (Non-contiguous)\n", sim_time);
+    free(plist);
     
 }
