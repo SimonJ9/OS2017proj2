@@ -209,6 +209,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                             int temp = 0;
                             while(temp < z-1){
                                 printf("%c, ",letter[temp]);
+                                fflush(stdout);
                                 temp++;
                             }
                             printf("%c)\n",letter[z-1]);
@@ -284,6 +285,7 @@ void Sim_Best_Fit(struct process_list* pl, FILE* output)
                             int temp = 0;
                             while(temp < z-1){
                                 printf("%c, ",letter[temp]);
+                                fflush(stdout);
                                 temp++;
                             }
                             // int t;
