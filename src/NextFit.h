@@ -24,6 +24,7 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
     struct process_list* plist = (struct process_list*)malloc(sizeof(struct process_list));
     initialize_list(*plist);
     plist->cap = pl->cap;
+    plist->_size = 0;
     plist->_index = pl->_index;
     plist->list = (struct process*)realloc(plist->list, sizeof(struct process) * pl->cap);
     counter = pl->_size;

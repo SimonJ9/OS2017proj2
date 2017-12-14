@@ -2,12 +2,11 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
 {
     int i, j;
     int len = 10, n = 0;
-    int p;
+    int p, s;
     fprintf(output, "PAGE TABLE [page,frame]:\n");
     for(i = 0; i < pl->_size; i++)
     {
-        p = 0;
-        n = 0;
+        p = 0, n = 0, s = 0;
         for(j = 0; j < FRAME_SIZE; j++)
         {
             if(frames[j] == pl->list[i].id)
@@ -23,15 +22,21 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
                 fprintf(output, "[%d,%d]", p, j);
                 p++;
                 n++;
+                s++;
+                if(n == len)
+                {
+                    n = 0;
+                    fprintf(output, "\n");
+                }
+                else
+                {
+                    if(s < pl->list[i]._mem)
+                        fprintf(output, " ");
+                }
             }
-            if(n%len == 0 && n>0)
+            else
             {
-                n = 0;
-                fprintf(output, "\n");
-            }
-            else if(n > 0)
-            {
-                fprintf(output, " ");
+                continue;
             }
         }
         
@@ -61,10 +66,10 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
     struct process_list* plist = (struct process_list*)malloc(sizeof(struct process_list));
     initialize_list(*plist);
     plist->cap = pl->cap;
+    plist->_size = 0;
     plist->_index = pl->_index;
     plist->list = (struct process*)realloc(plist->list, sizeof(struct process) * pl->cap);
     counter = pl->_size;
-    
     
     for(i = 0; i < pl->_size; i++)
     {
