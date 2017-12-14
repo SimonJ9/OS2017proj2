@@ -119,6 +119,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     {
                         if (frame[j] == pl->list[i].id)
                         {
+                            flag2 = true;
                             frame[j] = '.';
                             s_size++;
                         }
@@ -139,6 +140,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     {
                         if (frame[j] == pl->list[i].id)
                         {
+                            flag2 = true;
                             frame[j] = '.';
                             s_size++;
                         }
