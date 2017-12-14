@@ -83,6 +83,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
         if (t > max_t)
         {
             printf("time %dms: Simulator ended (Contiguous -- First-Fit)\n", t+dfrag_t-1);
+            printf("\n");
             break;
         }
         unsigned int i, j;
