@@ -89,6 +89,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
         unsigned int i, j;
         for (i = 0; i < pl->_size; i++)
         {
+            bool flag2 = false;
             if ( pl->list[i].t_arrival_1 + pl->list[i].t_running_1 != 0 )
             {
                 if ( t == pl->list[i].t_arrival_1 + pl->list[i].t_running_1 )
@@ -97,14 +98,19 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                     {
                         if (frame[j] == pl->list[i].id)
                         {
+                            flag2 = true;
                             frame[j] = '.';
                             s_size++;
                         }
                     }
-                    printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
-                    print_frames(stdout, frame);
+                    if (flag2)
+                    {
+                        printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
+                        print_frames(stdout, frame);
+                    }
                 }
             }
+            flag2 = false;
             if ( pl->list[i].t_arrival_2 + pl->list[i].t_running_2 != 0 )
             {
                 if ( t == pl->list[i].t_arrival_2 + pl->list[i].t_running_2 )
@@ -117,10 +123,14 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                             s_size++;
                         }
                     }
-                    printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
-                    print_frames(stdout, frame);
+                    if (flag2)
+                    {
+                        printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
+                        print_frames(stdout, frame);
+                    }
                 }
             }
+            flag2 = false;
             if ( pl->list[i].t_arrival_3 + pl->list[i].t_running_3 != 0 )
             {
                 if ( t == pl->list[i].t_arrival_3 + pl->list[i].t_running_3 )
@@ -133,8 +143,11 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                             s_size++;
                         }
                     }
-                    printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
-                    print_frames(stdout, frame);
+                    if (flag2)
+                    {
+                        printf("time %dms: Process %c removed:\n", t+dfrag_t, pl->list[i].id);
+                        print_frames(stdout, frame);
+                    }
                 }
             }
         }
