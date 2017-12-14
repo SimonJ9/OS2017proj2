@@ -12,10 +12,12 @@ struct process
     char id;
     unsigned int _mem;
     unsigned int t_arrival_1;
-    unsigned int t_running_1;
-    
     unsigned int t_arrival_2;
+    unsigned int t_arrival_3;
+    
+    unsigned int t_running_1;
     unsigned int t_running_2;
+    unsigned int t_running_3;
 };
 
 struct process_list
@@ -36,6 +38,8 @@ void initialize(struct process p)
     p.t_running_1 = 0;
     p.t_arrival_2 = 0;
     p.t_running_2 = 0;
+    p.t_arrival_3 = 0;
+    p.t_running_3 = 0;
 }
 
 
@@ -146,8 +150,22 @@ void parse_input(FILE* fp, struct process_list* plist, unsigned int num)
         {
             temp.t_arrival_2 = atoi(s);
             
-            s = strtok(NULL, "\n");
+            s = strtok(NULL, " ");
             temp.t_running_2 = atoi(s);
+            
+            s = strtok(NULL, "/");
+            if(s != NULL)
+            {
+                temp.t_arrival_3 = atoi(s);
+                
+                s = strtok(NULL, "\n");
+                temp.t_running_3 = atoi(s);
+            }
+            else
+            {
+                temp.t_arrival_3 = 0;
+                temp.t_running_3 = 0;
+            }
         }
         else
         {
@@ -195,9 +213,10 @@ void print_list(struct process_list* list)
     unsigned int i;
     for(i = 0; i < list->_size; i++)
     {
-        printf("Process id: %c, mem: %d, ta1: %d, tr1: %d, ta2: %d, tr2: %d\n", 
+        printf("Process id: %c, mem: %d, ta1: %d, tr1: %d, ta2: %d, tr2: %d, ta3: %d, tr3: %d\n", 
             list->list[i].id, list->list[i]._mem, list->list[i].t_arrival_1, 
             list->list[i].t_running_1, list->list[i].t_arrival_2, 
-            list->list[i].t_running_2);
+            list->list[i].t_running_2, list->list[i].t_arrival_3, 
+            list->list[i].t_running_3);
     }
 }
