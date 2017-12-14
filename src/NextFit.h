@@ -36,6 +36,10 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
         {
             counter++;
         }
+        if(pl->list[i].t_arrival_3 > 0)
+        {
+            counter++;
+        }
     }
     /*algo*/
     printf("time %dms: Simulator started (Contiguous -- Next-Fit)\n", sim_time);
@@ -49,6 +53,8 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
             /*remove*/
             if(sim_time == (plist->list[i].t_running_1 + plist->list[i].t_arrival_1) ||
                 (sim_time == (plist->list[i].t_running_2 + plist->list[i].t_arrival_2) &&
+                sim_time > 0) ||
+                (sim_time == (plist->list[i].t_running_3 + plist->list[i].t_arrival_3) &&
                 sim_time > 0))
             {
                 for(j = FRAME_SIZE; j > 0; j--)
@@ -61,7 +67,21 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                         
                     }
                 }
-                frame_ind++;
+                //only add 1 to ind when removed proc is the last one in frames
+                /*
+                int flag = 1;
+                for(j = frame_ind + 1; j < FRAME_SIZE; j++)
+                {
+                    if(frames[j] != '.')
+                    {
+                        flag = 0;
+                        break;
+                    }
+                }
+                if(flag)
+                    frame_ind++;
+                    */
+                printf("\nTILL HERE: %d !!!!!!!!!!!!!!!\n\n", frame_ind);
                 fprintf(output, "time %dms: Process %c removed:\n", 
                     sim_time, plist->list[i].id);
                 fflush(stdout);
@@ -70,10 +90,13 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
             }
             
             /*finished proceee*/
-            if((sim_time == plist->list[i].t_running_2 + plist->list[i].t_arrival_2 && 
+            //3 phases || 2 phases || 1 phase
+            if((sim_time == plist->list[i].t_running_3 + plist->list[i].t_arrival_3 && 
                 sim_time > 0) || 
+                (sim_time == plist->list[i].t_running_2 + plist->list[i].t_arrival_2 && 
+                plist->list[i].t_running_3 == 0 && sim_time > 0) || 
                 (sim_time == plist->list[i].t_running_1 + plist->list[i].t_arrival_1 &&
-                plist->list[i].t_running_2 == 0))
+                plist->list[i].t_running_3 == 0 && plist->list[i].t_running_2 == 0))
             {
                 remove_process(plist, plist->list[i].id);
             }
@@ -81,6 +104,8 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
             
             if(plist->list[i].t_arrival_1 == sim_time ||
                 (plist->list[i].t_arrival_2 == sim_time &&
+                sim_time > 0) ||
+                (plist->list[i].t_arrival_3 == sim_time &&
                 sim_time > 0))
             {
                 fprintf(output, "time %dms: Process %c arrived (requires %d frames)\n", 
@@ -93,19 +118,25 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                     fprintf(output, "time %dms: Cannot place process %c -- skipped!\n", 
                         sim_time, plist->list[i].id);
                         fflush(stdout);
-                    if(plist->list[i].t_running_2 == 0)
+                    //total 1, now 1
+                    if(plist->list[i].t_running_2 == 0 &&
+                        plist->list[i].t_running_3 == 0)
                     {
                         remove_process(plist, plist->list[i].id);
                         counter--;
                         i--;
                     }
-                    else if(sim_time == plist->list[i].t_arrival_2)
+                    //total 2, now 2
+                    else if(plist->list[i].t_running_3 == 0 && 
+                        sim_time == plist->list[i].t_arrival_2)
                     {
                         remove_process(plist, plist->list[i].id);
                         counter--;
                         i--;
                     }
-                    else
+                    //total 2, now 1
+                    else if(plist->list[i].t_running_3 == 0 && 
+                        sim_time == plist->list[i].t_arrival_1)
                     {
                         counter--;
                         plist->list[i].t_arrival_1 = plist->list[i].t_arrival_2;
@@ -113,21 +144,62 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                         plist->list[i].t_arrival_2 = 0;
                         plist->list[i].t_running_2 = 0;
                     }
+                    //total 3, now 3
+                    else if(sim_time == plist->list[i].t_arrival_3 &&
+                        sim_time > 0)
+                    {
+                        remove_process(plist, plist->list[i].id);
+                        counter--;
+                        i--;
+                    }
+                    //total 3, now 2
+                    /*
+                    else if(plist->list[i].t_running_3 != 0 &&
+                        sim_time == plist->list[i].t_arrival_2 &&
+                        sim_time > 0)
+                    {
+                        counter--;
+                        plist->list[i].t_arrival_1 = plist->list[i].t_arrival_2;
+                        plist->list[i].t_running_1 = plist->list[i].t_running_2;
+                        plist->list[i].t_arrival_2 = plist->list[i].t_arrival_3;
+                        plist->list[i].t_running_2 = plist->list[i].t_running_3;
+                        plist->list[i].t_arrival_3 = 0;
+                        plist->list[i].t_running_3 = 0;
+                    }
+                    */
+                    //total 3, now 1: change to total 2
+                    else
+                    {
+                        counter--;
+                        plist->list[i].t_arrival_1 = plist->list[i].t_arrival_2;
+                        plist->list[i].t_running_1 = plist->list[i].t_running_2;
+                        plist->list[i].t_arrival_2 = plist->list[i].t_arrival_3;
+                        plist->list[i].t_running_2 = plist->list[i].t_running_3;
+                        plist->list[i].t_arrival_3 = 0;
+                        plist->list[i].t_running_3 = 0;
+                    }
                 }
                 else
                 {
+                    //check if last process removed on current position
+                    if(frames[frame_ind == '.'] && frame_ind > 0)
+                    {
+                        frame_ind++;
+                    }
+                    
                     remained -= plist->list[i]._mem;
                     if(frame_ind >= FRAME_SIZE)
                     {
                         frame_ind = 0;
                     }
-                    if(256 - frame_ind <= plist->list[i]._mem)
+                    if(FRAME_SIZE - frame_ind <= plist->list[i]._mem)
                     {
                         frame_ind = 0;
                     }
                     /*check defrag*/
                     frame_counter = 0;
                     unsigned int temp = FRAME_SIZE + frame_ind;
+
                     for(j = frame_ind; j < temp; j++)
                     {
                         if(j < FRAME_SIZE) 
@@ -143,14 +215,14 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                         }
                         else
                         {
-                            if(frames[j - 256] == '.')
+                            if(frames[j - FRAME_SIZE] == '.')
                             {
                                 frame_counter++;
                             }
                             else
                             {
                                 frame_counter = 0;
-                                frame_ind = j - 255;
+                                frame_ind = j - FRAME_SIZE + 1;
                             }
                         }
                         
@@ -163,6 +235,7 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                                 k = frame_ind + j;
                             }
                             frame_ind = k;
+                printf("\nTILL HERE: %d !!!!!!!!!!!!!!!\n\n", frame_ind);
                             fprintf(output, "time %dms: Placed process %c:\n", 
                                 sim_time, plist->list[i].id);
                         fflush(stdout);
@@ -239,6 +312,14 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                             {
                                 plist->list[j].t_running_2 += dtime;
                             }
+                            if(plist->list[j].t_arrival_3 > sim_time)
+                            {
+                                plist->list[j].t_arrival_3 += dtime;
+                            }
+                            else
+                            {
+                                plist->list[j].t_running_3 += dtime;
+                            }
                         }
                         sim_time += dtime;
                         
@@ -268,9 +349,6 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
             }
             
         }
-        
-        
-        
         
         
         
