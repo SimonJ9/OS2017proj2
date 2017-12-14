@@ -81,7 +81,6 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                 if(flag)
                     frame_ind++;
                     */
-                printf("\nTILL HERE: %d !!!!!!!!!!!!!!!\n\n", frame_ind);
                 fprintf(output, "time %dms: Process %c removed:\n", 
                     sim_time, plist->list[i].id);
                 fflush(stdout);
@@ -235,7 +234,6 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                                 k = frame_ind + j;
                             }
                             frame_ind = k;
-                printf("\nTILL HERE: %d !!!!!!!!!!!!!!!\n\n", frame_ind);
                             fprintf(output, "time %dms: Placed process %c:\n", 
                                 sim_time, plist->list[i].id);
                         fflush(stdout);
