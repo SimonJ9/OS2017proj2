@@ -201,7 +201,6 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                         {
                             frame[FRAME_SIZE-j-1] = '.';
                         }
-                        add(pl, &flag, frame, i);
                         printf("time %dms: Defragmentation complete (moved %d frames:", t+dfrag_t, dfrag_t2);
                         for (j = 0; j < dfrag_s; j++)
                         {
@@ -216,6 +215,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                             }
                         }
                         print_frames(stdout, frame);
+                        add(pl, &flag, frame, i);
                     }
                 }
                 else
@@ -289,7 +289,6 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                         {
                             frame[FRAME_SIZE-j-1] = '.';
                         }
-                        add(pl, &flag, frame, i);
                         printf("time %dms: Defragmentation complete (moved %d frames:", t+dfrag_t, dfrag_t2);
                         for (j = 0; j < dfrag_s; j++)
                         {
@@ -304,6 +303,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                             }
                         }
                         print_frames(stdout, frame);
+                        add(pl, &flag, frame, i);
                     }
                 }
                 else
@@ -377,7 +377,6 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                         {
                             frame[FRAME_SIZE-j-1] = '.';
                         }
-                        add(pl, &flag, frame, i);
                         printf("time %dms: Defragmentation complete (moved %d frames:", t+dfrag_t, dfrag_t2);
                         for (j = 0; j < dfrag_s; j++)
                         {
@@ -392,6 +391,7 @@ void Sim_First_Fit(struct process_list* pl, FILE* output)
                             }
                         }
                         print_frames(stdout, frame);
+                        add(pl, &flag, frame, i);
                     }
                 }
                 else
