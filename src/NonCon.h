@@ -50,12 +50,12 @@ void print_page(struct process_list* pl, char frames[FRAME_SIZE], FILE* output)
 
 void Sim_Non_Con(struct process_list* pl, FILE* output)
 {
-    unsigned int sim_time = 0;
+    int sim_time = 0;
     char frames[FRAME_SIZE];
-    unsigned int remained = FRAME_SIZE;
-    unsigned int counter = 0;
+    int remained = FRAME_SIZE;
+    int counter = 0;
     
-    unsigned int i, j, frame_ind;
+    int i, j, frame_ind;
     for(i = 0; i < FRAME_SIZE; i++)
     {
         frames[i] = '.';
@@ -100,13 +100,12 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
                 (sim_time == (plist->list[i].t_running_3 + plist->list[i].t_arrival_3) &&
                 sim_time > 0))
             {
-                for(j = FRAME_SIZE; j > 0; j--)
+                for(j = 0; j < FRAME_SIZE; j++)
                 {
-                    if(frames[j - 1] == plist->list[i].id)
+                    if(frames[j] == plist->list[i].id)
                     {
-                        frames[j - 1] = '.';
+                        frames[j] = '.';
                         remained++;
-                        
                     }
                 }
                 fprintf(output, "time %dms: Process %c removed:\n", 
@@ -127,8 +126,12 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
                 plist->list[i].t_running_3 == 0 && plist->list[i].t_running_2 == 0))
             {
                 remove_process(plist, plist->list[i].id);
+                i--;
             }
-            
+        }
+        
+        for(i = 0; i < plist->_size; i++)
+        {
             
             if(plist->list[i].t_arrival_1 == sim_time ||
                 (plist->list[i].t_arrival_2 == sim_time &&
@@ -139,8 +142,7 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
                 fprintf(output, "time %dms: Process %c arrived (requires %d frames)\n", 
                     sim_time, plist->list[i].id, plist->list[i]._mem);
                         fflush(stdout);
-            
-                /*place process*/
+                //place process / skip 
                 if(plist->list[i]._mem > remained)
                 {
                     fprintf(output, "time %dms: Cannot place process %c -- skipped!\n", 
@@ -194,10 +196,11 @@ void Sim_Non_Con(struct process_list* pl, FILE* output)
                         plist->list[i].t_running_3 = 0;
                     }
                 }
+                //placing
                 else
                 {
                     remained -= plist->list[i]._mem;
-                    unsigned int temp = plist->list[i]._mem;
+                    int temp = plist->list[i]._mem;
                     frame_ind = 0;
                     while( temp > 0 )
                     {
