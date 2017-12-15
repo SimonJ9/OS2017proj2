@@ -11,7 +11,7 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
     unsigned int sim_time = 0;
     char frames[FRAME_SIZE];
     unsigned int remained = FRAME_SIZE;
-    unsigned int counter = 0;
+    int counter = 0;
     
     unsigned int i, j, frame_ind, frame_counter;
     for(i = 0; i < FRAME_SIZE; i++)
@@ -88,7 +88,7 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                 print_frames(output, frames);
                 counter--;
             }
-            
+
             /*finished proceee*/
             //3 phases || 2 phases || 1 phase
             if((sim_time == plist->list[i].t_running_3 + plist->list[i].t_arrival_3 && 
@@ -99,9 +99,13 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                 plist->list[i].t_running_3 == 0 && plist->list[i].t_running_2 == 0))
             {
                 remove_process(plist, plist->list[i].id);
+                i--;
             }
-            
-            
+        }
+        
+        for(i = 0; i < plist->_size; i++)
+        {    
+            /////////////////////////////////////////////////
             if(plist->list[i].t_arrival_1 == sim_time ||
                 (plist->list[i].t_arrival_2 == sim_time &&
                 sim_time > 0) ||
@@ -154,20 +158,6 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
                         i--;
                     }
                     //total 3, now 2
-                    /*
-                    else if(plist->list[i].t_running_3 != 0 &&
-                        sim_time == plist->list[i].t_arrival_2 &&
-                        sim_time > 0)
-                    {
-                        counter--;
-                        plist->list[i].t_arrival_1 = plist->list[i].t_arrival_2;
-                        plist->list[i].t_running_1 = plist->list[i].t_running_2;
-                        plist->list[i].t_arrival_2 = plist->list[i].t_arrival_3;
-                        plist->list[i].t_running_2 = plist->list[i].t_running_3;
-                        plist->list[i].t_arrival_3 = 0;
-                        plist->list[i].t_running_3 = 0;
-                    }
-                    */
                     //total 3, now 1: change to total 2
                     else
                     {
@@ -349,9 +339,6 @@ void Sim_Next_Fit(struct process_list* pl, FILE* output)
             }
             
         }
-        
-        
-        
         
         sim_time++;
     }
